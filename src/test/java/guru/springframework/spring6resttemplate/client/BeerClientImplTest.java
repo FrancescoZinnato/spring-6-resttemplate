@@ -14,7 +14,12 @@ class BeerClientImplTest {
 
     @Test
     void listBeers() {
-        beerClient.listBeers();
+        beerClient.listBeers("johan"); // Se c'è uno spazio nel nome c'è un problema, devo vedere perché prkddii
+    }
+
+    @Test
+    void listBeersNoName() {
+        beerClient.listBeers(null);
     }
 
 }

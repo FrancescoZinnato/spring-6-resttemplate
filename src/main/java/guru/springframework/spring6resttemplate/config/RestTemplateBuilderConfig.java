@@ -19,7 +19,7 @@ public class RestTemplateBuilderConfig {
 
         RestTemplateBuilder restTemplateBuilder = configurer.configure(new RestTemplateBuilder());
 
-        DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory("http://localhost:8080");
+        DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(rootUrl);
 
         return restTemplateBuilder.uriTemplateHandler(uriBuilderFactory);
     }

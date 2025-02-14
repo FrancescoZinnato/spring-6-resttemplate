@@ -1,5 +1,6 @@
 package guru.springframework.spring6resttemplate.client;
 
+import guru.springframework.spring6resttemplate.model.BeerDTO;
 import guru.springframework.spring6resttemplate.model.BeerDTOPageImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -19,11 +20,15 @@ public class BeerClientImpl implements BeerClient {
     private static final String GET_BEER_PATH = "/api/v1/beer";
 
     @Override
-    public Page<BeerDTOPageImpl> listBeers() {
+    public Page<BeerDTO> listBeers(String beerName) {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
         //Ci permette di costruire il path includendo i query parameters
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath(GET_BEER_PATH);
+
+        if(beerName != null) {
+            builder.queryParam("beerName", beerName);
+        }
 
         ResponseEntity<BeerDTOPageImpl> pageResponse = restTemplate.getForEntity(builder.toUriString(), BeerDTOPageImpl.class);
 
