@@ -2,6 +2,7 @@ package guru.springframework.spring6resttemplate.client;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import guru.springframework.spring6resttemplate.model.BeerDTO;
+import guru.springframework.spring6resttemplate.model.BeerDTOPageImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.domain.Page;
@@ -39,10 +40,12 @@ public class BeerClientImpl implements BeerClient {
         System.out.println(jsonResponse.getBody().findPath("content").isMissingNode());
 
         //SystemOut per vedere la struttura del body della jsonResponse
-        System.out.println(jsonResponse.getBody());
+        //System.out.println(jsonResponse.getBody());
 
         //Stampo tutti i nomi delle birre accedendo ai nodi basandomi sulla struttura del body ottenuta dal print sopra, funziona
-        jsonResponse.getBody().findPath("_embedded").findPath("beers").elements().forEachRemaining(node -> System.out.println(node.get("beerName").asText()));
+        //jsonResponse.getBody().findPath("_embedded").findPath("beers").elements().forEachRemaining(node -> System.out.println(node.get("beerName").asText()));
+
+        ResponseEntity<BeerDTOPageImpl> pageResponse = restTemplate.getForEntity(BASE_URL + GET_BEER_PATH, BeerDTOPageImpl.class);
 
         //System.out.println(response.getBody());
 
