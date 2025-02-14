@@ -1,5 +1,6 @@
 package guru.springframework.spring6resttemplate.client;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import guru.springframework.spring6resttemplate.model.BeerDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -25,9 +26,25 @@ public class BeerClientImpl implements BeerClient {
 
         ResponseEntity<String> response = restTemplate.getForEntity(BASE_URL + GET_BEER_PATH, String.class);
 
+        //Restituisce una LinkedHashMap con altre LinkedHashMap al suo interno
         ResponseEntity<Map> mapResponse = restTemplate.getForEntity(BASE_URL + GET_BEER_PATH, Map.class);
 
-        System.out.println(response.getBody());
+        //Restituisce un JsonNode della libreria Jackson
+        ResponseEntity<JsonNode> jsonResponse = restTemplate.getForEntity(BASE_URL + GET_BEER_PATH, JsonNode.class);
+
+        //Restituisce un nodo mancante come confermato con il system out sottostante, non funziona
+        jsonResponse.getBody().findPath("content")
+                .elements().forEachRemaining(node -> System.out.println(node.get("beerName").asText()));
+        //Conferma che il nodo è mancante
+        System.out.println(jsonResponse.getBody().findPath("content").isMissingNode());
+
+        //SystemOut per vedere la struttura del body della jsonResponse
+        System.out.println(jsonResponse.getBody());
+
+        //Stampo tutti i nomi delle birre accedendo ai nodi basandomi sulla struttura del body ottenuta dal print sopra, funziona
+        jsonResponse.getBody().findPath("_embedded").findPath("beers").elements().forEachRemaining(node -> System.out.println(node.get("beerName").asText()));
+
+        //System.out.println(response.getBody());
 
         return null;
     }
