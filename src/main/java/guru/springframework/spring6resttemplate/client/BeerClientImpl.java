@@ -18,20 +18,20 @@ public class BeerClientImpl implements BeerClient {
 
     private final RestTemplateBuilder restTemplateBuilder;
 
-    private static final String BASE_URL = "http://localhost:8080";
+    //private static final String BASE_URL = "http://localhost:8080"; //Rimosso perchè definito nella classe di configurazione del RestTemplate
     private static final String GET_BEER_PATH = "/api/v1/beer";
 
     @Override
     public Page<BeerDTO> listBeers() {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
-        ResponseEntity<String> response = restTemplate.getForEntity(BASE_URL + GET_BEER_PATH, String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity(GET_BEER_PATH, String.class);
 
         //Restituisce una LinkedHashMap con altre LinkedHashMap al suo interno
-        ResponseEntity<Map> mapResponse = restTemplate.getForEntity(BASE_URL + GET_BEER_PATH, Map.class);
+        ResponseEntity<Map> mapResponse = restTemplate.getForEntity(GET_BEER_PATH, Map.class);
 
         //Restituisce un JsonNode della libreria Jackson
-        ResponseEntity<JsonNode> jsonResponse = restTemplate.getForEntity(BASE_URL + GET_BEER_PATH, JsonNode.class);
+        ResponseEntity<JsonNode> jsonResponse = restTemplate.getForEntity(GET_BEER_PATH, JsonNode.class);
 
         //Restituisce un nodo mancante come confermato con il system out sottostante, non funziona
         jsonResponse.getBody().findPath("content")
@@ -45,7 +45,7 @@ public class BeerClientImpl implements BeerClient {
         //Stampo tutti i nomi delle birre accedendo ai nodi basandomi sulla struttura del body ottenuta dal print sopra, funziona
         //jsonResponse.getBody().findPath("_embedded").findPath("beers").elements().forEachRemaining(node -> System.out.println(node.get("beerName").asText()));
 
-        ResponseEntity<BeerDTOPageImpl> pageResponse = restTemplate.getForEntity(BASE_URL + GET_BEER_PATH, BeerDTOPageImpl.class);
+        ResponseEntity<BeerDTOPageImpl> pageResponse = restTemplate.getForEntity(GET_BEER_PATH, BeerDTOPageImpl.class);
 
         //System.out.println(response.getBody());
 
