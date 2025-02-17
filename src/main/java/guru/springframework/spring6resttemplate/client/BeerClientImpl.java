@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class BeerClientImpl implements BeerClient {
@@ -19,6 +21,14 @@ public class BeerClientImpl implements BeerClient {
 
     //private static final String BASE_URL = "http://localhost:8080"; //Rimosso perchè definito nella classe di configurazione del RestTemplate
     private static final String GET_BEER_PATH = "/api/v1/beer";
+    private static final String GET_BEER_BY_ID_PATH = "/api/v1/beer/{beerId}";
+
+    @Override
+    public BeerDTO getBeerById(UUID beerId) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+
+        return restTemplate.getForObject(GET_BEER_BY_ID_PATH, BeerDTO.class, beerId);
+    }
 
     @Override
     public Page<BeerDTO> listBeers() {
