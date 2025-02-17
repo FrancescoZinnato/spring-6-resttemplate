@@ -19,6 +19,25 @@ class BeerClientImplTest {
     BeerClient beerClient;
 
     @Test
+    void testUpdateBeer() {
+        BeerDTO newDto = BeerDTO.builder()
+                .price(new BigDecimal("10.99"))
+                .beerName("Mango Bobs")
+                .beerStyle(BeerStyle.IPA)
+                .quantityOnHand(500)
+                .upc("123345")
+                .build();
+
+        BeerDTO beerDTO = beerClient.createBeer(newDto);
+
+        final String newUpc = "123345";
+        beerDTO.setUpc(newUpc);
+        BeerDTO updatedBeer = beerClient.updateBeer(beerDTO);
+
+        assertEquals(newUpc, updatedBeer.getUpc());
+    }
+
+    @Test
     void listBeersName() {
         beerClient.listBeers("johan", null, null, null); // Se c'è uno spazio nel nome c'è un problema, devo vedere perché prkddii
     }
