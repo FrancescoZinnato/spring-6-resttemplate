@@ -29,8 +29,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withAccepted;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 
 
 @RestClientTest(BeerClientImpl.class) // Devo aggiungere BeerClientImpl.class perchè l'annotazione isola il RestTemplate e non carica tutti i bean dell'app
@@ -65,6 +64,18 @@ public class BeerClientMockTest {
         beerClient = new BeerClientImpl(mockRestTemplateBuilder); // Assicuro che il beerClient sia implementato in base al template e riceva le dipendenze
         beerDTO = getBeerDto();
         dtoJsonString = objectMapper.writeValueAsString(beerDTO);
+    }
+
+    @Test
+    void testUpdateBeer() {
+        server.expect(method(HttpMethod.PUT))
+                .andExpect(requestToUriTemplate(URL + BeerClientImpl.GET_BEER_BY_ID_PATH, beerDTO.getId()))
+                .andRespond(withNoContent());
+
+        mockGetOperation();
+
+        BeerDTO responseDto = beerClient.updateBeer(beerDTO);
+        assertThat(responseDto.getId()).isEqualTo(beerDTO.getId());
     }
 
     @Test
